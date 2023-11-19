@@ -1,0 +1,82 @@
+Testez l'interface de votre site
+
+- Les tests d’intégration arrivent souvent après les tests unitaires. Alors que les tests unitaires visent à tester des portions très précises (généralement une fonction) de votre code. si vous ne pouvez pas réaliser votre test unitaire facilement, c’est que votre code est trop compliqué et doit être simplifié. Les tests d’intégration testent l’ensemble d’une fonctionnalité.
+un test E2E va répliquer un parcours complet : nous allons parcourir plusieurs pages et regarder si tout fonctionne correctement. Un test d’intégration, lui, ne teste qu’une fonctionnalité d’une page.
+
+Il est important que vous ajoutiez vos test aux endroits les plus critiques de votre application (fonctionnalités, qui, si elles cassent, ne vous permettent plus d’utiliser votre site correctement).
+
+- Les suites (blocs "describe") et les spécifications (blocs "it") sont les deux éléments nécessaires pour mettre en place vos tests. "describe" et "it" prennent deux arguments : une chaîne de caractères et une fonction. 
+Ensuite "expect" (assertions/expectations) décrit ce qui "doit" se passer dans le bloc it mais ne prend qu'un seul argument : la valeur réelle.
+Enfin les matchers comparent une valeur réelle avec une valeur attendue (expect(6).not.toBeLessThan(6); expect(array).toContain(member);).
+
+describe("Saving a comment", function() {
+    it("should throw an error if the comment is over 1000 characters", function() {
+        comment.length = 1200;
+
+        expect(function() {
+            comment.save();
+        }).toThrowError("comment is too long");
+    });
+});
+
+Option 1:
+1. Allez sur la page "Releases" de Jasmine sur GitHub et téléchargez la version la plus récente
+2. Un des dossiers s'appelle spec. Ouvrez le dossier spec et, à l'intérieur, créez un nouveau fichier appelé  nomTestSpec.js .
+3. Un autre dossier s'appelle  src . Dans le dossier  src , créez un nouveau fichier appelé  nomTest.js .
+4. Enfin, vous devez relier les fichiers de test au fichier de code (SpecRunner.html).
+
+Option 2:
+1. Télécharger l'extension Jest sur VSCode (https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest)
+2. Ecrire le code à tester dans un fichier nomFichier.js (samples/unit/nomFichier.js)
+3. Ecrire les suites et specifications dans un fichier nomFichier.test.js (samples/unit/nomFichier.test.js
+)
+4. Sauvegarder le fichier nomFichier.test.js et aller dans le terminal Jest (test: "node_modules/.bin/jest" ou "npm test" ; code coverage: "node_modules/.bin/jest --coverage" ou "npm test -- --coverage") 
+
+
+- Pour les tests d'intégration, nous allons nous servir d’un deuxième framework en plus de Jest : DOM Testing Library. En fait, ce deuxième framework va nous aider à sélectionner des éléments sur le DOM.
+
+//les tests ne vont pas passer si l'on oublie ce commentaire
+/**
+* @jest-environment jsdom
+*/
+
+// Ici j'importe DOM Test Library
+import {
+    getByTestId
+} from '@testing-library/dom'
+
+ 
+// Je crée ma suite de test
+describe('Sample 1 Integration Test Suites', () => {
+    // Je crée mon test
+    it('should display "Hello, Thomas"', () => {
+        // Je crée un nouveau noeud
+        const $wrapper = document.createElement('div')
+
+        // Je lui injecte du HTML
+        $wrapper.innerHTML = `
+            <div id="root">
+                <h1 data-testid="hello">Hello, Thomas</h1>
+            </div>
+        `
+
+        // Je teste le resultat
+    expect(getByTestId($wrapper, "hello").textContent).toEqual("Hello, Thomas")
+    })
+
+})
+
+-Testing Library fournit une API qui facilite la sélection d’éléments sur le DOM. Elle se compose des Queries qui récupère des noeuds sur la page (getByRole, getByLabelText, getAllByLabelText, getByAltText, getByTestId, getAllByTestId, ...)  et des Events qui représente les evenements que l'on peut simuler sur le DOM (fireEvent, click, ...)
+
+-Jest Test DOM nous fournit des matchers de base de Jest(toBeDisabled  qui vérifie si un bouton a l’attribut disabled  ou non, toBeRequired  qui vérifie si un nœud a l’attribut required, toHaveAttribute  qui teste si un nœud a un attribut,...)
+
+
+
+
+
+
+
+
+
+
+
