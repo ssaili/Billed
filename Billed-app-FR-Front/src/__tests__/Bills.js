@@ -50,7 +50,7 @@ describe("Given I am connected as an employee", () => {
           document, onNavigate, store: null, bills:bills, localStorage: window.localStorage
         })
 
-        const handleClickNewBill = jest.fn((e) => newBills.handleClickNewBill())
+        const handleClickNewBill = jest.fn(newBills.handleClickNewBill)
 
         const newBillBtn = screen.getByTestId('btn-new-bill')
 
@@ -76,7 +76,7 @@ describe("Given I am connected as an employee", () => {
 
         const eyeBtn = screen.getAllByTestId('icon-eye')[0]
 
-        const handleClickIconEye = jest.fn((e) => newBills.handleClickIconEye(eyeBtn))
+        const handleClickIconEye = jest.fn(newBills.handleClickIconEye(eyeBtn))
 
         eyeBtn.addEventListener('click', handleClickIconEye)
         userEvent.click(eyeBtn)
@@ -89,7 +89,6 @@ describe("Given I am connected as an employee", () => {
 })
 
 //test d'intégration GET
-
 describe("When Employee Navigate on Bills Dashboard", () => {
   beforeEach(() => {
     jest.spyOn(mockStore, "bills");
@@ -119,11 +118,11 @@ describe("When Employee Navigate on Bills Dashboard", () => {
     });
     window.onNavigate(ROUTES_PATH.Bills);
     await new Promise(process.nextTick);
-    const message = await screen.getByText(/Erreur 404/);
+    const message = screen.getByText(/Erreur 404/);
     expect(message).toBeTruthy();
   });
 
-  test("fetches messages from an API and fails with 500 message error", async () => {
+  test("fetches bills from an API and fails with 500 message error", async () => {
     mockStore.bills.mockImplementationOnce(() => {
       return {
         list: () => {
@@ -134,7 +133,7 @@ describe("When Employee Navigate on Bills Dashboard", () => {
 
     window.onNavigate(ROUTES_PATH.Bills);
     await new Promise(process.nextTick);
-    const message = await screen.getByText(/Erreur 500/);
+    const message = screen.getByText(/Erreur 500/);
     expect(message).toBeTruthy();
   });
 
